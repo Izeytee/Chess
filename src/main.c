@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "board.h"
-#include "board_print_plain.h"
+#include "board.c"
+#include "board_print_plain.c"
 int main()
 {   
     char place[8][8];
@@ -9,7 +9,7 @@ int main()
     printboard(place);
     board_print_plain(place);
     char Move[5];
-    while(1)
+    while(CheckKing(place))
     {
             scanf("%s", Move);
             CheckIn(Move, place);

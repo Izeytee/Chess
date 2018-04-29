@@ -64,20 +64,122 @@ int CheckInMove(char Move[], char place[][8])
      {
         case 'p': if (n1 == 6)
              { if ((((n1 - n2) < 3) && ((n1 - n2) > 0)) &&  flag == 0 && c1 == c2
-             && CheckWay(Move, place) && EmptySpace == ' ') return 1; }
+             && CheckWay(Move, place) && EmptySpace == ' ') return 1;}
+             if ((place[n2][c2]!=' ') && (((c1+1==c2) || (c1-1==c2))
+             && (n1-1==n2)) &&  flag == 0 && CheckEnemy(Move,place)) return 1;
              if ((((n1 - n2) < 2) && ((n1 - n2) > 0) )&&  flag == 0 && c1 == c2
              && CheckWay(Move, place) && EmptySpace == ' ') return 1;
-             if ((place[n2][c2]!=' ') && (((c1+1==c2) || (c1-1==c2))
-             && (n1-1==n2)) &&  flag == 0) return 1;
+             else goto M;
         case 'P': if (n1 == 1)
              { if ((((n2 - n1) < 3) && ((n2 - n1) > 0))&& flag == 1 && c1 == c2
-             && CheckWay(Move, place) && EmptySpace == ' ') return 1; }
+             && CheckWay(Move, place) && EmptySpace == ' ') return 1;}
+             if ((place[n2][c2]!=' ') && (((c1+1==c2) || (c1-1==c2))
+             && (n1+1==n2)) && flag == 1 && CheckEnemy(Move,place)) return 1;
              if ((((n2 - n1) < 2 )&& ((n2 - n1) > 0))&& flag == 1 && c1 == c2
              && CheckWay(Move, place) && EmptySpace == ' ') return 1;
-             if ((place[n2][c2]!=' ') && (((c1+1==c2) || (c1-1==c2))
-             && (n1+1==n2)) && flag == 1) return 1;
+             else goto M;
+        case 'r': if (CheckWay(Move, place) && CheckEnemy(Move,place)
+             && ((c1 == c2) || (n1 == n2)) &&  flag == 0) return 1;
+             else goto M;
+        case 'R': if (CheckWay(Move, place) && CheckEnemy(Move, place)
+             && ((c1 == c2) || (n1 == n2)) &&  flag == 1) return 1;
+             else goto M;
+        case 'b': if (CheckWay(Move, place) && CheckEnemy(Move, place)
+             && (!(abs(c1 - c2 + n1 - n2))) &&  flag == 0) return 1;
+             else goto M;
+        case 'B': if (CheckWay(Move, place) && CheckEnemy(Move, place)
+             && (!(abs(c1 - c2 + n1 - n2))) &&  flag == 1) return 1;
+             else goto M;
+        case 'q': if (CheckWay(Move, place) && CheckEnemy(Move, place)
+             && (!(abs(c1 - c2 + n1 - n2)) || (c2 == c1)
+             || (n2 == n1)) &&  flag == 0) return 1;
+             else goto M;
+        case 'Q': if (CheckWay(Move, place) && CheckEnemy(Move, place)
+             && (!(abs(c1 - c2 + n1 - n2)) || (c2 == c1)
+             || (n2 == n1)) &&  flag == 1) return 1;
+             else goto M;
+        case 'n': if (CheckEnemy(Move,place) && flag == 0 
+             && (abs(c1 - c2) + abs(n1 - n2) == 3) && (c1 != c2) && (n1 != n2))
+             return 1;
+             else goto M;
+        case 'N': if (CheckEnemy(Move,place) && flag == 1 
+             && (abs(c1 - c2) + abs(n1 - n2) == 3) && (c1 != c2) && (n1 != n2))
+             return 1;
+             else goto M;
+        case 'k': if ((n1 == 7) && (abs(c2 - c1) == 2) && CheckWay(Move, place) && EmptySpace == ' ')
+             {
+                if (place[n1][c1+3] == 'r')
+                {
+                   place[n1][c1+1] == 'r';
+                   place[n1][c1+3] == ' ';
+                   return 1;
+                }
+                if (place[n1][c1-3] == 'r')
+                {
+                   place[n1][c1-1] == 'r';
+                   place[n1][c1-3] == ' ';
+                   return 1;
+                }
+             };
+             if (CheckEnemy(Move,place) && flag == 0 
+             && (abs(c1 - c2)<2) && (abs(n1 - n2)<2)) return 1;
+             else goto M;
+        case 'K': if ((n1 == 0) && (abs(c2 - c1) == 2) && CheckWay(Move, place) && EmptySpace == ' ')
+             {
+                if (place[n1][c1+3] == 'R')
+                {
+                   place[n1][c1+1] == 'R';
+                   place[n1][c1+3] == ' ';
+                   return 1;
+                };
+                if (place[n1][c1-3] == 'R')
+                {
+                   place[n1][c1-1] == 'R';
+                   place[n1][c1-3] == ' ';
+                   return 1;
+                };
+             };
+             if (CheckEnemy(Move,place) && flag == 1 
+             && (abs(c1 - c2)<2) && (abs(n1 - n2)<2)) return 1;
+             else goto M;
+             M:
         default: return 0;
      }
+}
+
+int CheckEnemy(char Move[], char place[][8])
+{
+   int n2 = (int)(Move[4]) - 49;
+   int c2 = (int)(Move[3]) - 65;
+   if (flag == 1)
+   {
+       if (place[n2][c2]=='p' || place[n2][c2]=='r' || place[n2][c2]=='n'
+       || place[n2][c2]=='b' || place[n2][c2]=='q' || place[n2][c2]=='k'
+       || place[n2][c2]==' ')
+       return 1;
+       else
+       return 0;
+   }
+   else
+   {
+      if (place[n2][c2]=='P' || place[n2][c2]=='R' || place[n2][c2]=='N'
+      || place[n2][c2]=='B' || place[n2][c2]=='Q' || place[n2][c2]=='K'
+      || place[n2][c2]==' ')
+      return 1;
+      else
+      return 0;
+   }
+}
+
+int CheckKing(char place[][8])
+{
+   int i, j;
+   for (i = 0; i < 8; i++)
+   {
+      for (j = 0; j < 8; j++)
+      if (place[i][j] == 'K' || place[i][j] == 'k') return 1;
+   }
+   return 0;
 }
 
 int CheckWay(char Move[], char place[][8])
@@ -119,6 +221,44 @@ int CheckWay(char Move[], char place[][8])
           return 0;
        }
     }
+    if (c1 == c2)
+    {
+       if (n1 < n2)
+       {
+          for(i = 1; i < (n2-n1); i++)
+          {
+             if (place[n1+i][c1]!=' ')
+             return 0;
+          }
+       }
+       else
+       {
+          for(i = 1; i < (n1-n2); i++)
+          {
+             if (place[n1-i][c1]!=' ')
+             return 0;
+          }
+       }
+    }
+    if (n1 == n2)
+    {
+       if (c1 < c2)
+       {
+          for(i = 1; i < (c2-c1); i++)
+          {
+             if (place[n1][c1+i]!=' ')
+             return 0;
+          }
+       }
+       else
+       {
+          for(i = 1; i < (c1-c2); i++)
+          {
+             if (place[n1][c1-i]!=' ')
+             return 0;
+          }
+       }
+    }
     
     return 1;
 }
@@ -138,6 +278,16 @@ void CheckIn(char Move[], char place[][8])
         {
            place[n2][c2] = place[n1][c1];
            place[n1][c1] = ' ';
+           if ((place[n2][c2]=='p' || place[n2][c2]=='P') && (Move[4]==0 || Move[4] == 7))
+           {
+              char z;
+              printf("Choose figure\n");
+              begin:
+              scanf("%c",&z);
+              if ((flag == 1 && (z!='R' || z!='Q' || z!='N' || z!='B')) || (flag == 0 && (z!='r' || z!='q' || z!='n' || z!='b')))
+              { printf("Wrong figure\n"); goto begin;}
+              place[n2][c2] = z;
+           }
            flag = 1 - flag;
            printboard(place);
         }

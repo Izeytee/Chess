@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "board.c"
-#include "board_print_plain.c"
+#include "board.h"
+#include "board_print_plain.h"
 int main()
 {   
     char place[8][8];

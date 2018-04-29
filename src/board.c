@@ -4,6 +4,7 @@
 #include <math.h>
 #include "board.h"
 
+
 int flag = 1;
 
 void printboard(char place[][8])
@@ -71,11 +72,11 @@ int CheckInMove(char Move[], char place[][8])
              && CheckWay(Move, place) && EmptySpace == ' ') return 1;
              else goto M;
         case 'P': if (n1 == 1)
-             { if ((((n2 - n1) < 3) && ((n2 - n1) > 0))&& flag == 1 && c1 == c2
+             { if ((((n2 - n1) < 3) && ((n2 - n1) > 0)) && c1 == c2
              && CheckWay(Move, place) && EmptySpace == ' ') return 1;}
              if ((place[n2][c2]!=' ') && (((c1+1==c2) || (c1-1==c2))
-             && (n1+1==n2)) && flag == 1 && CheckEnemy(Move,place)) return 1;
-             if ((((n2 - n1) < 2 )&& ((n2 - n1) > 0))&& flag == 1 && c1 == c2
+             && (n1+1==n2)) && CheckEnemy(Move,place)) return 1;
+             if ((((n2 - n1) < 2 )&& ((n2 - n1) > 0)) && c1 == c2
              && CheckWay(Move, place) && EmptySpace == ' ') return 1;
              else goto M;
         case 'r': if (CheckWay(Move, place) && CheckEnemy(Move,place)
@@ -85,17 +86,17 @@ int CheckInMove(char Move[], char place[][8])
              && ((c1 == c2) || (n1 == n2)) &&  flag == 1) return 1;
              else goto M;
         case 'b': if (CheckWay(Move, place) && CheckEnemy(Move, place)
-             && (!(abs(c1 - c2 + n1 - n2))) &&  flag == 0) return 1;
+             && (abs(n1 - n2) == abs(c1 - c2)) &&  flag == 0) return 1;
              else goto M;
         case 'B': if (CheckWay(Move, place) && CheckEnemy(Move, place)
-             && (!(abs(c1 - c2 + n1 - n2))) &&  flag == 1) return 1;
+             && (abs(n1 - n2) == abs(c1 - c2)) &&  flag == 1) return 1;
              else goto M;
         case 'q': if (CheckWay(Move, place) && CheckEnemy(Move, place)
-             && (!(abs(c1 - c2 + n1 - n2)) || (c2 == c1)
+             && ((abs(n1 - n2) == abs(c1 - c2)) || (c2 == c1)
              || (n2 == n1)) &&  flag == 0) return 1;
              else goto M;
         case 'Q': if (CheckWay(Move, place) && CheckEnemy(Move, place)
-             && (!(abs(c1 - c2 + n1 - n2)) || (c2 == c1)
+             && ((abs(n1 - n2) == abs(c1 - c2)) || (c2 == c1)
              || (n2 == n1)) &&  flag == 1) return 1;
              else goto M;
         case 'n': if (CheckEnemy(Move,place) && flag == 0 
@@ -110,14 +111,14 @@ int CheckInMove(char Move[], char place[][8])
              {
                 if (place[n1][c1+3] == 'r')
                 {
-                   place[n1][c1+1] == 'r';
-                   place[n1][c1+3] == ' ';
+                   place[n1][c1+1] = 'r';
+                   place[n1][c1+3] = ' ';
                    return 1;
                 }
                 if (place[n1][c1-3] == 'r')
                 {
-                   place[n1][c1-1] == 'r';
-                   place[n1][c1-3] == ' ';
+                   place[n1][c1-1] = 'r';
+                   place[n1][c1-3] = ' ';
                    return 1;
                 }
              };
@@ -128,14 +129,14 @@ int CheckInMove(char Move[], char place[][8])
              {
                 if (place[n1][c1+3] == 'R')
                 {
-                   place[n1][c1+1] == 'R';
-                   place[n1][c1+3] == ' ';
+                   place[n1][c1+1] = 'R';
+                   place[n1][c1+3] = ' ';
                    return 1;
                 };
                 if (place[n1][c1-3] == 'R')
                 {
-                   place[n1][c1-1] == 'R';
-                   place[n1][c1-3] == ' ';
+                   place[n1][c1-1] = 'R';
+                   place[n1][c1-3] = ' ';
                    return 1;
                 };
              };
@@ -173,12 +174,17 @@ int CheckEnemy(char Move[], char place[][8])
 
 int CheckKing(char place[][8])
 {
-   int i, j;
+   int i, j, KingW = 0, KingB = 0;
    for (i = 0; i < 8; i++)
    {
       for (j = 0; j < 8; j++)
-      if (place[i][j] == 'K' || place[i][j] == 'k') return 1;
+      {
+      if (place[i][j] == 'K') KingW = 1;
+      if (place[i][j] == 'k') KingB = 1;
+      }
    }
+   if ((KingW == 1) && (KingB == 1))
+   return 1;
    return 0;
 }
 
@@ -277,17 +283,18 @@ void CheckIn(char Move[], char place[][8])
         if(CheckInMove(Move, place))
         {
            place[n2][c2] = place[n1][c1];
-           place[n1][c1] = ' ';
-           if ((place[n2][c2]=='p' || place[n2][c2]=='P') && (Move[4]==0 || Move[4] == 7))
+           if ((place[n1][c1]=='p' || place[n1][c1]=='P') && (n2 == 0 || n2 ==7))
            {
-              char z;
+              char ChooseFigure;
               printf("Choose figure\n");
-              begin:
-              scanf("%c",&z);
-              if ((flag == 1 && (z!='R' || z!='Q' || z!='N' || z!='B')) || (flag == 0 && (z!='r' || z!='q' || z!='n' || z!='b')))
-              { printf("Wrong figure\n"); goto begin;}
-              place[n2][c2] = z;
+              scanf("%c", &ChooseFigure);
+              while ((flag == 1 && (ChooseFigure!='R' || ChooseFigure!='Q' 
+              || ChooseFigure!='N' || ChooseFigure!='B')) || (flag == 0 && (ChooseFigure!='r' 
+              || ChooseFigure!='q' || ChooseFigure!='n' || ChooseFigure!='b')))
+              {printf("Wrong figure\n");}
+              place[n2][c2] = ChooseFigure;
            }
+           place[n1][c1] = ' ';
            flag = 1 - flag;
            printboard(place);
         }

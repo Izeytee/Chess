@@ -68,15 +68,15 @@ int CheckInMove(char Move[], char place[][8])
              && CheckWay(Move, place) && EmptySpace == ' ') return 1;}
              if ((place[n2][c2]!=' ') && (((c1+1==c2) || (c1-1==c2))
              && (n1-1==n2)) &&  flag == 0 && CheckEnemy(Move,place)) return 1;
-             if ((((n1 - n2) < 2) && ((n1 - n2) > 0) )&&  flag == 0 && c1 == c2
+             if ((((n1 - n2) < 2) && ((n1 - n2) > 0)) &&  flag == 0 && c1 == c2
              && CheckWay(Move, place) && EmptySpace == ' ') return 1;
              else goto M;
         case 'P': if (n1 == 1)
-             { if ((((n2 - n1) < 3) && ((n2 - n1) > 0)) && c1 == c2
+             { if ((((n2 - n1) < 3) && ((n2 - n1) > 0)) && flag == 1 && c1 == c2
              && CheckWay(Move, place) && EmptySpace == ' ') return 1;}
              if ((place[n2][c2]!=' ') && (((c1+1==c2) || (c1-1==c2))
-             && (n1+1==n2)) && CheckEnemy(Move,place)) return 1;
-             if ((((n2 - n1) < 2 )&& ((n2 - n1) > 0)) && c1 == c2
+             && (n1+1==n2)) && flag == 1 && CheckEnemy(Move,place)) return 1;
+             if ((((n2 - n1) < 2 )&& ((n2 - n1) > 0)) && flag == 1 && c1 == c2
              && CheckWay(Move, place) && EmptySpace == ' ') return 1;
              else goto M;
         case 'r': if (CheckWay(Move, place) && CheckEnemy(Move,place)
@@ -269,6 +269,29 @@ int CheckWay(char Move[], char place[][8])
     return 1;
 }
 
+void CheckInPawn(char place[][8])
+{
+  int i;
+  for (i = 0; i < 8; i++)
+  if ((place[7][i] == 'P') || (place[0][i] == 'p'))
+   {
+      char ChooseFigure;
+      printf("Choose figure\n");
+      K:
+      scanf(" %c", &ChooseFigure);
+      if ((flag == 1 && (ChooseFigure!='R' && ChooseFigure!='Q' 
+      && ChooseFigure!='N' && ChooseFigure!='B')) || (flag == 0 && (ChooseFigure!='r' 
+      && ChooseFigure!='q' && ChooseFigure!='n' && ChooseFigure!='b')))
+      {printf("Wrong figure\n"); goto K;}
+      else
+      {
+	 if (place[7][i] == 'P') place[7][i] = ChooseFigure;
+	 if (place[0][i] == 'p') place[0][i] = ChooseFigure;
+	 break;
+      }
+   }
+}
+
 void CheckIn(char Move[], char place[][8])
 {
      if ((strlen(Move)==5) && (Move[2]=='-')
@@ -283,18 +306,8 @@ void CheckIn(char Move[], char place[][8])
         if(CheckInMove(Move, place))
         {
            place[n2][c2] = place[n1][c1];
-           if ((place[n1][c1]=='p' || place[n1][c1]=='P') && (n2 == 0 || n2 ==7))
-           {
-              char ChooseFigure;
-              printf("Choose figure\n");
-              scanf("%c", &ChooseFigure);
-              while ((flag == 1 && (ChooseFigure!='R' || ChooseFigure!='Q' 
-              || ChooseFigure!='N' || ChooseFigure!='B')) || (flag == 0 && (ChooseFigure!='r' 
-              || ChooseFigure!='q' || ChooseFigure!='n' || ChooseFigure!='b')))
-              {printf("Wrong figure\n");}
-              place[n2][c2] = ChooseFigure;
-           }
            place[n1][c1] = ' ';
+	   CheckInPawn(place);
            flag = 1 - flag;
            printboard(place);
         }

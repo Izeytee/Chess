@@ -8,5 +8,6 @@ int CheckInMove(char Move[], char place[][8]);
 int CheckWay(char Move[], char place[][8]);
 int CheckKing(char place[][8]);
 int CheckEnemy(char Move[], char place[][8]);
+void CheckInPawn(char place[][8]);
 
 #endif

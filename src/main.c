@@ -16,6 +16,7 @@ int main()
             board_print_plain(place);
             board_print_plain_Move(Move);
     }
+    return 1;
 }
 
 

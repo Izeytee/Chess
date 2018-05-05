@@ -3,7 +3,7 @@ CFLAGS  = -Wall -Werror
 
 .PHONY: clean
 
-default: bin/chessvizual: 
+default: bin/chessvizual 
 
 test: bin/test
 	bin/test

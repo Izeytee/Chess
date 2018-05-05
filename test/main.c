@@ -30,6 +30,20 @@ CTEST (CheckKing, CorrectKingCheck)
       ASSERT_EQUAL(expecting,result); 
 }
 
+CTEST (CheckChooseFigure, CorrectChooseFigure)
+{
+      int i, j, result = 0;
+      for(i = 0; i < 8; i++)
+      {
+         for(j = 0; j < 8; j++)
+         Board[i][j] = ' ';
+      }
+      Board[7][7] = 'P';
+      CheckInPawn(Board);
+      if (Board[7][7] == 'Q' || Board[7][7] == 'R' || Board[7][7] == 'N' || Board[7][7] == 'B') result = 1;
+      ASSERT_TRUE(result);
+}
+
 CTEST (CheckKing, CorrectKingCheckEndWhite)
 {
       int i, j;

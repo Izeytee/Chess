@@ -1,6 +1,6 @@
 #define CTEST_MAIN
 
-#include "board.c"
+#include "board.h"
 #include "ctest.h"
 
 char Board[8][8];

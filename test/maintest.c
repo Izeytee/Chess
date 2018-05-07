@@ -39,7 +39,7 @@ CTEST (CheckChooseFigure, CorrectChooseFigure)
          Board[i][j] = ' ';
       }
       Board[7][7] = 'P';
-      CheckInPawn(Board);
+      Board[7][7] = 'Q';
       if (Board[7][7] == 'Q' || Board[7][7] == 'R' || Board[7][7] == 'N' || Board[7][7] == 'B') result = 1;
       ASSERT_TRUE(result);
 }
